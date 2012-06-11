@@ -1,5 +1,6 @@
 package me.supermaxman.worldthreadit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -34,6 +35,8 @@ public WorldThreaditSet(List<Block> b, Material i, Player p){ blocks = b;ItemID=
              }
             }
             world.setAutoSave(true);
+			player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN + blocks.size()+" Block Edit.");
+			System.out.println("[WorldThredit]  "+ blocks.size()+" Block Edit By "+player.getName());
         }
     }
     

@@ -55,30 +55,33 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 					final Location ll = lloc.get(p.getName());
 					
 					if ((rl==null)||(ll==null)){
-						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+" Locations not set.");
+						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+"Locations not set.");
 						return true;
 					}
 					if (args.length!=2){
-						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+" Arguement Error.");
+						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+"Arguement Error.");
 						return true;
 					}
 					List<Block> blocks = new ArrayList<Block>();
 					
-					if (Integer.getInteger(args[1]) == null){
-						
+					
+					Material m = null;					
+					try  
+					   {m = Material.getMaterial(Integer.parseInt(args[1]));
+					   }catch( Exception e){
+							 String s = args[1].toUpperCase();
+							 m = Material.getMaterial(s);
+							 }  
+					
+					
+					if (m==null){
+						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+"Arguement Error.");
+						return true;	
 					}
-					
-					
-					
-					final String Item = args[1].toUpperCase();
-					
-					final Material m = Material.getMaterial(Item);
-					
-					
-					//final int ItemID = Integer.parseInt(args[1]);
-					
-					
-					
+					if ((m==Material.LAVA)||(m==Material.WATER)){
+						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+"Water and Lava Not Allowed.");
+						return true;
+					}
 					
 			        Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
 			        Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
@@ -91,8 +94,6 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			        }
 			        
 					Thread thread =new WorldThreaditSet(blocks, m, p);
-					p.sendMessage(ChatColor.AQUA+"[WorldThredit]: "+ChatColor.GREEN + blocks.size()+" Block Edit.");
-					System.out.println("[WorldThredit]  "+ blocks.size()+" Block Edit By "+p.getName());
 					thread.start();
 					
             		return true;
@@ -116,7 +117,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			if ((player.getItemInHand().getType()==Material.GOLD_AXE)&&(player.isOp())){
 				Location loc = event.getClickedBlock().getLocation();
 				rloc.put(player.getName(), loc);
-				player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN+" Location 2 Placed.");
+				player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN+"Location 2 Placed.");
 				event.setCancelled(true);
 			}
 			
@@ -124,7 +125,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			if ((player.getItemInHand().getType()==Material.GOLD_AXE)&&(player.isOp())){
 				Location loc = event.getClickedBlock().getLocation();
 				lloc.put(player.getName(), loc);
-				player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN+" Location 1 Placed.");
+				player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN+"Location 1 Placed.");
 				event.setCancelled(true);
 			}
 		
