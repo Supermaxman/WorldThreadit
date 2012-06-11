@@ -40,7 +40,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 		
 	}
 	
-	private List<Block> blocks = new ArrayList<Block>();
+	
 	
 	
 	
@@ -62,7 +62,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 						p.sendMessage(ChatColor.BOLD+""+ChatColor.AQUA+"Arguement Error.");
 						return true;
 					}
-					
+					List<Block> blocks = new ArrayList<Block>();
 					
 					final int ItemID = Integer.parseInt(args[1]);
 					
