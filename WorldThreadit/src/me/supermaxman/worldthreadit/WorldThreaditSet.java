@@ -1,8 +1,10 @@
 package me.supermaxman.worldthreadit;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -12,7 +14,9 @@ private final List<Block> blocks;
 
 private final Material ItemID;
 
-public WorldThreaditSet(List<Block> b, Material i){ blocks = b;ItemID=i;}
+private final Player player;
+
+public WorldThreaditSet(List<Block> b, Material i, Player p){ blocks = b;ItemID=i; player = p;}
     public void run() {
         if(blocks != null){
         World world = null;
@@ -21,9 +25,13 @@ public WorldThreaditSet(List<Block> b, Material i){ blocks = b;ItemID=i;}
             }
             world.setAutoSave(false);
             for (Block b : blocks) {
-            	if(b != null){
+             if(b != null){
+                    final Chunk c = b.getChunk();
+                    if(!c.isLoaded()){
+                       c.load();
+                    }
                 b.setType(ItemID);
-            	}
+             }
             }
             world.setAutoSave(true);
         }
