@@ -1,11 +1,5 @@
 package me.supermaxman.worldthreadit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class WorldThreadit extends JavaPlugin implements Listener{
 	
@@ -62,8 +62,6 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 						p.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.RED+"Arguement Error.");
 						return true;
 					}
-					List<Block> blocks = new ArrayList<Block>();
-					
 					
 					Material m = null;					
 					try  
@@ -83,18 +81,24 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 						return true;
 					}
 					
-			        Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
-			        Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-			        for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
-			        	for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
-			                for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
+			        final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
+			        final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
+                    final Material finalM = m;
+                    new Thread(){
+                        public void run(){
+                            final List<Block> blocks = new ArrayList<Block>();
+                            for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
+			        	        for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
+			                        for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
 			                    blocks.add(p.getWorld().getBlockAt(x, y, z));
 			                }
 			            }
 			        }
-			        
-					Thread thread =new WorldThreaditSet(blocks, m, p);
-					thread.start();
+                            Thread thread =new WorldThreaditSet(blocks, finalM, p);
+                            thread.start();
+                  }
+                }.start();
+
 					
             		return true;
             			
