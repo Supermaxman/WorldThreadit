@@ -22,8 +22,10 @@ public class WorldThreaditSet extends Thread {
 		            }
 		            world.setAutoSave(false);
 		            for (Block b : blocks) {
+		            	if (b==null){
+		            		break;
+		            	}
 		            	b.setTypeId(ItemID);
-		            	
 		            }
 		            world.setAutoSave(true);
 		    }
