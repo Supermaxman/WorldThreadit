@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -64,6 +62,8 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 						p.sendMessage(ChatColor.BOLD+""+ChatColor.AQUA+"Arguement Error.");
 						return true;
 					}
+					
+					
 					final int ItemID = Integer.parseInt(args[1]);
 					
 			        Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
@@ -76,23 +76,9 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			            }
 			        }
 			        
-			        Thread thread = new Thread() {
-			            @Override
-			            public void run() {
-			                Thread t = Thread.currentThread();
-							while (!t.isInterrupted()) {
-							    for (Block b : blocks) {
-							        b.setTypeId(ItemID);
-							        try {
-										sleep(1);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-							    }
-							    this.interrupt();
-							}
-			            }
-			        };thread.start();
+					Thread thread =new WorldThreaditSet(blocks, ItemID);
+					thread.start();
+					
             		return true;
             			
             	}else if(args[0].equalsIgnoreCase("wand")){

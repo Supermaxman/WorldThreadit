@@ -1,0 +1,13 @@
+name: WorldThreadit
+
+main: me.supermaxman.worldthreadit.WorldThreadit
+
+version: 1.0
+
+description: WorldThreadit
+
+commands:
+  wt:
+    description:
+    usage: wt [args]
+
