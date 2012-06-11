@@ -64,7 +64,16 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 					}
 					List<Block> blocks = new ArrayList<Block>();
 					
-					final int ItemID = Integer.parseInt(args[1]);
+					
+					final String Item = args[1].toUpperCase();
+					
+					final Material m = Material.getMaterial(Item);
+					
+					
+					//final int ItemID = Integer.parseInt(args[1]);
+					
+					
+					
 					
 			        Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
 			        Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
@@ -76,7 +85,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			            }
 			        }
 			        
-					Thread thread =new WorldThreaditSet(blocks, ItemID);
+					Thread thread =new WorldThreaditSet(blocks, m);
 					thread.start();
 					
             		return true;
