@@ -17,7 +17,12 @@ private final Material ItemID;
 
 private final Player player;
 
-public WorldThreaditSet(List<Block> b, Material i, Player p){ blocks = b;ItemID=i; player = p;}
+public WorldThreaditSet(List<Block> b, Material i, Player p){
+    setName("WT-Thread-"+getId());
+    blocks = b;
+    ItemID=i;
+    player = p;
+}
     public void run() {
         if(blocks != null){
         World world = null;
