@@ -86,7 +86,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
                     final Material finalM = m;
                     new Thread(){
                         public void run(){
-                            final List<Block> blocks = new ArrayList<Block>();
+                            List<Block> blocks = new ArrayList<Block>();
                             for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
 			        	        for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
 			                        for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
