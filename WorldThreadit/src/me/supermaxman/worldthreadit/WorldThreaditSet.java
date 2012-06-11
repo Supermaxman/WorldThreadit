@@ -33,6 +33,7 @@ public WorldThreaditSet(List<Block> b, Material i, Player p){
             for (Block b : blocks) {
              if(b != null){
                     final Chunk c = b.getChunk();
+
                     if(!c.isLoaded()){
                        c.load();
                     }
@@ -40,7 +41,9 @@ public WorldThreaditSet(List<Block> b, Material i, Player p){
              }
             }
             world.setAutoSave(true);
-			player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN + blocks.size()+" Block Edit.");
+
+
+            player.sendMessage(ChatColor.AQUA+"[WorldThredit] "+ChatColor.GREEN + blocks.size()+" Block Edit.");
 			System.out.println("[WorldThredit]  "+ blocks.size()+" Block Edit By "+player.getName());
         }
     }
