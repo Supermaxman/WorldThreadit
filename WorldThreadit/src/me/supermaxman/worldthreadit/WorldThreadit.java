@@ -83,9 +83,7 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 					
 			        final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
 			        final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-                    final Material finalM = m;
-                    new Thread(){
-                        public void run(){
+
                             List<Block> blocks = new ArrayList<Block>();
                             for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
 			        	        for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
@@ -94,10 +92,9 @@ public class WorldThreadit extends JavaPlugin implements Listener{
 			                }
 			            }
 			        }
-                            Thread thread =new WorldThreaditSet(blocks, finalM, p);
+                            Thread thread =new WorldThreaditSet(blocks, m, p);
                             thread.start();
-                  }
-                }.start();
+
 
 					
             		return true;
