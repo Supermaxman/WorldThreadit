@@ -17,7 +17,6 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class WorldThreadit extends JavaPlugin implements Listener {
 
@@ -26,19 +25,18 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     public static Map<String, Location> lloc = new HashMap<String, Location>();
 
     public static WorldThreadit plugin;
-    public final Logger logger = Logger.getLogger("Minecraft");
 
     @Override
     public void onDisable() {
-        this.logger.info("WorldThreadit Disabled.");
+        getLogger().info("WorldThreadit Disabled.");
     }
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new WorldThreadit(), this);
         PluginDescriptionFile pdfFile = this.getDescription();
-        this.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
-
+        getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+        plugin = this;
     }
 
 
