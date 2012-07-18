@@ -6,17 +6,15 @@ import org.bukkit.block.Block;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 /**
  * User: Benjamin
  * Date: 18/07/12
  * Time: 13:53
  */
-public class BlockQueue extends Thread {
-    LinkedList<QueuedBlock> list = new LinkedList<QueuedBlock>();
-    WorldThreadit threadit;
-    Random rand = new Random(6783628548L);
+class BlockQueue extends Thread {
+    final LinkedList<QueuedBlock> list = new LinkedList<QueuedBlock>();
+    private final WorldThreadit threadit;
 
     public BlockQueue(WorldThreadit threadit) {
         this.threadit = threadit;

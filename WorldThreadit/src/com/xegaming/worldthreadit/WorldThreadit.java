@@ -24,11 +24,10 @@ import java.util.logging.Logger;
 public class WorldThreadit extends JavaPlugin implements Listener {
 
     //Required
-    public static Map<String, Location> rloc = new HashMap<String, Location>();
-    public static Map<String, Location> lloc = new HashMap<String, Location>();
-    BlockQueue bq;
-    public static WorldThreadit plugin;
-    public Logger log;
+    private static final Map<String, Location> rloc = new HashMap<String, Location>();
+    private static final Map<String, Location> lloc = new HashMap<String, Location>();
+    private BlockQueue bq;
+    private static Logger log;
 
     @Override
     public void onDisable() {
@@ -44,7 +43,6 @@ public class WorldThreadit extends JavaPlugin implements Listener {
         bq = new BlockQueue(this);
         bq.start();
         getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
-        plugin = this;
     }
 
 
@@ -67,7 +65,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         return true;
                     }
 
-                    Material m = null;
+                    Material m;
                     try {
                         m = Material.getMaterial(Integer.parseInt(args[1]));
                     } catch (Exception e) {
@@ -111,7 +109,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                             }
 
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
-                            WorldThreadit.plugin.getLogger().info(i + " Block Edit By " + p.getName());
+                            WorldThreadit.log.info(i + " Block Edit By " + p.getName());
                         }
                     }.start();
                     return true;
