@@ -19,6 +19,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class WorldThreadit extends JavaPlugin implements Listener {
 
@@ -27,14 +28,17 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     public static Map<String, Location> lloc = new HashMap<String, Location>();
     BlockQueue bq;
     public static WorldThreadit plugin;
+    public Logger log;
 
     @Override
     public void onDisable() {
+        bq.interrupt();
         getLogger().info("WorldThreadit Disabled.");
     }
 
     @Override
     public void onEnable() {
+        log = getLogger();
         getServer().getPluginManager().registerEvents(new WorldThreadit(), this);
         PluginDescriptionFile pdfFile = this.getDescription();
         bq = new BlockQueue(this);
@@ -76,10 +80,12 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
                         return true;
                     }
-//                    if ((m == Material.LAVA) || (m == Material.WATER)) {
-//                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
-//                        return true;
-//                    }
+                    if ((m == Material.LAVA) || (m == Material.WATER)) {
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
+                        return true;
+                    }
+                    p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
+
                     final World world = p.getWorld();
                     final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
                     final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
@@ -94,8 +100,10 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                                         for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
                                             final Block b = world.getBlockAt(x, y, z);
                                             if (!(y <= 0 && y >= 256)) {
-                                                bq.addToBlockQueue(b, finalM);
-                                                i++;
+                                                if (!b.getType().equals(finalM)) {
+                                                    bq.addToBlockQueue(b, finalM);
+                                                    i++;
+                                                }
                                             }
                                         }
                                     }

@@ -26,23 +26,28 @@ public class BlockQueue extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
+            try {
+                sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             synchronized (list) {
                 while (!list.isEmpty()) {
                     try {
                         QueuedBlock queuedBlock = list.pop();
                         World w = threadit.getServer().getWorld(queuedBlock.worldName);
                         Block b = w.getBlockAt(queuedBlock.X, queuedBlock.Y, queuedBlock.Z);
+                        if (!b.getChunk().isLoaded()) {
+                            b.getChunk().load();
+                        }
                         b.setTypeId(queuedBlock.newID);
-                        sleep(1);
                     } catch (NoSuchElementException e) {
                         break;
                     } catch (NullPointerException e) {
                         //Swallowing due to lazy
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
-
                 }
+
             }
         }
     }
