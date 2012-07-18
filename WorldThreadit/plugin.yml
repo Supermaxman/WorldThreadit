@@ -1,6 +1,6 @@
 name: WorldThreadit
 
-main: me.supermaxman.worldthreadit.WorldThreadit
+main: com.xegaming.worldthreadit.WorldThreadit
 
 version: 1.0
 

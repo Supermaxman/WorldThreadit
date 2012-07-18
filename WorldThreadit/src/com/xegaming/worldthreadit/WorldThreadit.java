@@ -1,8 +1,10 @@
-package me.supermaxman.worldthreadit;
+package com.xegaming.worldthreadit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     //Required
     public static Map<String, Location> rloc = new HashMap<String, Location>();
     public static Map<String, Location> lloc = new HashMap<String, Location>();
-
+    BlockQueue bq;
     public static WorldThreadit plugin;
 
     @Override
@@ -35,6 +37,8 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new WorldThreadit(), this);
         PluginDescriptionFile pdfFile = this.getDescription();
+        bq = new BlockQueue(this);
+        bq.start();
         getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
         plugin = this;
     }
@@ -72,13 +76,36 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
                         return true;
                     }
-                    if ((m == Material.LAVA) || (m == Material.WATER)) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
-                        return true;
-                    }
-                    Thread thread = new WorldThreaditSet(Vector.getMinimum(ll.toVector(), rl.toVector()), Vector.getMaximum(ll.toVector(), rl.toVector()), m, p);
-                    thread.start();
+//                    if ((m == Material.LAVA) || (m == Material.WATER)) {
+//                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
+//                        return true;
+//                    }
+                    final World world = p.getWorld();
+                    final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
+                    final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
+                    final Material finalM = m;
+                    new Thread() {
+                        public void run() {
+                            int i = 0;
 
+                            synchronized (bq.list) {
+                                for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
+                                    for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
+                                        for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
+                                            final Block b = world.getBlockAt(x, y, z);
+                                            if (!(y <= 0 && y >= 256)) {
+                                                bq.addToBlockQueue(b, finalM);
+                                                i++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
+                            WorldThreadit.plugin.getLogger().info(i + " Block Edit By " + p.getName());
+                        }
+                    }.start();
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("wand")) {
