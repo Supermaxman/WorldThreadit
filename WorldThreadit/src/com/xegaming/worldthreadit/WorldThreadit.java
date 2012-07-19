@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,8 +25,8 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     //Required
     private static final Map<String, Location> rloc = new HashMap<String, Location>();
     private static final Map<String, Location> lloc = new HashMap<String, Location>();
-    private BlockQueue bq;
-    private static Logger log;
+    public BlockQueue bq;
+    public static Logger log;
 
     @Override
     public void onDisable() {
@@ -52,6 +51,8 @@ public class WorldThreadit extends JavaPlugin implements Listener {
             if (sender.isOp()) {
 
                 final Player p = (Player) sender;
+                final World world = p.getWorld();
+
                 if (args[0].equalsIgnoreCase("set")) {
                     final Location rl = rloc.get(p.getName());
                     final Location ll = lloc.get(p.getName());
@@ -84,34 +85,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     }
                     p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
 
-                    final World world = p.getWorld();
-                    final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
-                    final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-                    final Material finalM = m;
-                    new Thread() {
-                        public void run() {
-                            int i = 0;
-
-                            synchronized (bq.list) {
-                                for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
-                                    for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
-                                        for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
-                                            final Block b = world.getBlockAt(x, y, z);
-                                            if (!(y <= 0 && y >= 256)) {
-                                                if (!b.getType().equals(finalM)) {
-                                                    bq.addToBlockQueue(b, finalM);
-                                                    i++;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
-                            WorldThreadit.log.info(i + " Block Edit By " + p.getName());
-                        }
-                    }.start();
+                    new setCommand(this, p, ll, rl, world, m);
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("replace")) {
@@ -153,35 +127,9 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     }
                     p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
 
-                    final World world = p.getWorld();
                     final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
                     final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-                    final Material finalM = m;
-                    final Material finalR = r;
-                    new Thread() {
-                        public void run() {
-                            int i = 0;
-
-                            synchronized (bq.list) {
-                                for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
-                                    for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
-                                        for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
-                                            final Block b = world.getBlockAt(x, y, z);
-                                            if (!(y <= 0 && y >= 256)) {
-                                                if (b.getType().equals(finalM)) {
-                                                    bq.addToBlockQueue(b, finalR);
-                                                    i++;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
-                            WorldThreadit.log.info(i + " Block Edit By " + p.getName());
-                        }
-                    }.start();
+                    new replaceCommand(this, p, ll, rl, world, m, r);
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("wand")) {
