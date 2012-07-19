@@ -114,6 +114,76 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     }.start();
                     return true;
 
+                } else if (args[0].equalsIgnoreCase("replace")) {
+                    final Location rl = rloc.get(p.getName());
+                    final Location ll = lloc.get(p.getName());
+
+                    if ((rl == null) || (ll == null)) {
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Locations not set.");
+                        return true;
+                    }
+                    if (args.length != 3) {
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
+                        return true;
+                    }
+
+                    Material m;
+                    try {
+                        m = Material.getMaterial(Integer.parseInt(args[1]));
+                    } catch (Exception e) {
+                        String s = args[1].toUpperCase();
+                        m = Material.getMaterial(s);
+                    }
+                    Material r;
+                    try {
+                        r = Material.getMaterial(Integer.parseInt(args[2]));
+                    } catch (Exception e) {
+                        String s = args[2].toUpperCase();
+                        r = Material.getMaterial(s);
+                    }
+
+                    if (m == null || r == null) {
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
+                        return true;
+                    }
+
+                    if ((r == Material.LAVA) || (r == Material.WATER)) {
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
+                        return true;
+                    }
+                    p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
+
+                    final World world = p.getWorld();
+                    final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
+                    final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
+                    final Material finalM = m;
+                    final Material finalR = r;
+                    new Thread() {
+                        public void run() {
+                            int i = 0;
+
+                            synchronized (bq.list) {
+                                for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
+                                    for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
+                                        for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
+                                            final Block b = world.getBlockAt(x, y, z);
+                                            if (!(y <= 0 && y >= 256)) {
+                                                if (b.getType().equals(finalM)) {
+                                                    bq.addToBlockQueue(b, finalR);
+                                                    i++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
+                            WorldThreadit.log.info(i + " Block Edit By " + p.getName());
+                        }
+                    }.start();
+                    return true;
+
                 } else if (args[0].equalsIgnoreCase("wand")) {
                     p.getInventory().addItem(new ItemStack(Material.GOLD_AXE, 1));
                 }

@@ -32,13 +32,17 @@ class BlockQueue extends Thread {
             synchronized (list) {
                 while (!list.isEmpty()) {
                     try {
-                        QueuedBlock queuedBlock = list.pop();
-                        World w = threadit.getServer().getWorld(queuedBlock.worldName);
-                        Block b = w.getBlockAt(queuedBlock.X, queuedBlock.Y, queuedBlock.Z);
-                        if (!b.getChunk().isLoaded()) {
-                            b.getChunk().load();
-                        }
-                        b.setTypeId(queuedBlock.newID);
+                        final QueuedBlock queuedBlock = list.pop();
+                        threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
+                            public void run() {
+                                World w = threadit.getServer().getWorld(queuedBlock.worldName);
+                                final Block b = w.getBlockAt(queuedBlock.X, queuedBlock.Y, queuedBlock.Z);
+                                if (!b.getChunk().isLoaded()) {
+                                    b.getChunk().load();
+                                }
+                                b.setTypeId(queuedBlock.newID);
+                            }
+                        });
                     } catch (NoSuchElementException e) {
                         break;
                     } catch (NullPointerException e) {
