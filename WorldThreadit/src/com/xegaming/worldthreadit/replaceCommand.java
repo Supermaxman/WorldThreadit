@@ -45,6 +45,9 @@ public class replaceCommand extends Thread {
                         final Block b = world.getBlockAt(x, y, z);
                         if (!(y <= 0 && y >= 256)) {
                             if (b.getType().equals(mat)) {
+                                if (!b.getChunk().isLoaded()) {
+                                    b.getChunk().load();
+                                }
                                 threadit.bq.addToBlockQueue(b, repl);
                                 i++;
                             }
