@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -134,6 +135,29 @@ public class WorldThreadit extends JavaPlugin implements Listener {
 
                 } else if (args[0].equalsIgnoreCase("wand")) {
                     p.getInventory().addItem(new ItemStack(Material.GOLD_AXE, 1));
+                } else if (args[0].equalsIgnoreCase("expand")) {
+                	
+                	if (args.length==3){
+                		BlockFace side = null;
+                		try{
+                			side = BlockFace.valueOf(args[1]);
+                		}catch(IllegalArgumentException e){
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Direction.");
+                            return true;
+                		}
+                		int amt;
+                		try{
+                			amt = Integer.parseInt(args[2]);
+                		}catch(NumberFormatException e){
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Number.");
+                            return true;
+                		}
+                		System.out.println(side.toString()+":"+amt);
+                	}else{
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Incorrect Syntax.");
+                	}
+                	
+                	
                 }
             }
         }
