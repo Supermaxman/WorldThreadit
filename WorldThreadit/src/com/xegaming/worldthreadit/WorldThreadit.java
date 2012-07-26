@@ -152,6 +152,10 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Number.");
                             return true;
                 		}
+                		if(!rloc.containsKey(p.getName())&&!lloc.containsKey(p.getName())){
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "You have not made an area selection yet.");
+                			return true;
+                		}
                 		final Location rl = rloc.get(p.getName());
                         final Location ll = lloc.get(p.getName());
                         Vector v = rl.toVector().subtract(p.getLocation().toVector());
