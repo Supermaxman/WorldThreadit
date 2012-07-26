@@ -140,7 +140,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                 	if (args.length==3){
                 		BlockFace side = null;
                 		try{
-                			side = BlockFace.valueOf(args[1]);
+                			side = BlockFace.valueOf(args[1].toUpperCase());
                 		}catch(IllegalArgumentException e){
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Direction.");
                             return true;
