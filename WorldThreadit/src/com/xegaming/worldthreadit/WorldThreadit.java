@@ -156,14 +156,62 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         final Location ll = lloc.get(p.getName());
                         Vector v = rl.toVector().subtract(p.getLocation().toVector());
                         Vector v2 = ll.toVector().subtract(p.getLocation().toVector());
+                        /*
+                         * -x = north
+                         * +x = south
+                         * +z = west
+                         * -z = east
+                         */
+                        
+                        
+                        
                         if(side == BlockFace.UP){
                         	if(v.getY()>v2.getY()){
+                        		if(rl.getY()+amt>=255){
+                        			rloc.put(p.getName(), new Location(rl.getWorld(),rl.getBlock().getX(),254,rl.getBlock().getZ()));
+                        		}else{
+                            		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        		}
+                        	}else{
+                        		if(ll.getY()+amt>=255){
+                        			lloc.put(p.getName(), new Location(ll.getWorld(),ll.getBlock().getX(),254,ll.getBlock().getZ()));
+                        		}else{
+                            		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        		}
+                        	}
+                        }else if(side == BlockFace.DOWN){
+                        	if(v.getY()<v2.getY()){
+                        		if(rl.getY()-amt<=0){
+                        			rloc.put(p.getName(), new Location(rl.getWorld(),rl.getBlock().getX(),0,rl.getBlock().getZ()));
+                        		}else{
+                            		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        		}
+                        	}else{
+                        		if(ll.getY()-amt<=0){
+                        			lloc.put(p.getName(), new Location(ll.getWorld(),ll.getBlock().getX(),0,ll.getBlock().getZ()));
+                        		}else{
+                            		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        		}                        	}
+                        }else if(side == BlockFace.NORTH){
+                        	if(v.getX()<v2.getX()){
                         		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
                         	}else{
                         		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
                         	}
-                        }else if(side == BlockFace.DOWN){
-                        	if(v.getY()<v2.getY()){
+                        }else if(side == BlockFace.SOUTH){
+                        	if(v.getX()>v2.getX()){
+                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        	}else{
+                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        	}
+                        }else if(side == BlockFace.EAST){
+                        	if(v.getZ()<v2.getZ()){
+                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        	}else{
+                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        	}
+                        }else if(side == BlockFace.WEST){
+                        	if(v.getZ()>v2.getZ()){
                         		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
                         	}else{
                         		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
