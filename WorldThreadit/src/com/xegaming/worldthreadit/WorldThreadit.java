@@ -1,5 +1,9 @@
 package com.xegaming.worldthreadit;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,10 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
 
 public class WorldThreadit extends JavaPlugin implements Listener {
 
@@ -128,8 +128,8 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     }
                     p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
 
-                    final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
-                    final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
+                    //final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
+                    //final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
                     new replaceCommand(this, p, ll, rl, world, m, r);
                     return true;
 
@@ -140,19 +140,41 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                 	if (args.length==3){
                 		BlockFace side = null;
                 		try{
-                			side = BlockFace.valueOf(args[1].toUpperCase());
+                			side = BlockFace.valueOf(args[2].toUpperCase());
                 		}catch(IllegalArgumentException e){
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Direction.");
                             return true;
                 		}
                 		int amt;
                 		try{
-                			amt = Integer.parseInt(args[2]);
+                			amt = Integer.parseInt(args[1]);
                 		}catch(NumberFormatException e){
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Number.");
                             return true;
                 		}
-                		System.out.println(side.toString()+":"+amt);
+                		final Location rl = rloc.get(p.getName());
+                        final Location ll = lloc.get(p.getName());
+                        Vector v = rl.toVector().subtract(p.getLocation().toVector());
+                        Vector v2 = ll.toVector().subtract(p.getLocation().toVector());
+                        if(side == BlockFace.UP){
+                        	if(v.getY()>v2.getY()){
+                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        	}else{
+                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        	}
+                        }else if(side == BlockFace.DOWN){
+                        	if(v.getY()<v2.getY()){
+                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                        	}else{
+                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                        	}
+                        }else{
+                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Direction Not Allowed.");
+                        	return true;
+                        }
+                        
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Expanded "+amt+" "+side.toString().toLowerCase()+".");
+                        
                 	}else{
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Incorrect Syntax.");
                 	}
