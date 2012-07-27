@@ -1,9 +1,5 @@
 package com.xegaming.worldthreadit;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,6 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class WorldThreadit extends JavaPlugin implements Listener {
 
@@ -136,27 +136,27 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                 } else if (args[0].equalsIgnoreCase("wand")) {
                     p.getInventory().addItem(new ItemStack(Material.GOLD_AXE, 1));
                 } else if (args[0].equalsIgnoreCase("expand")) {
-                	
-                	if (args.length==3){
-                		BlockFace side = null;
-                		try{
-                			side = BlockFace.valueOf(args[2].toUpperCase());
-                		}catch(IllegalArgumentException e){
+
+                    if (args.length == 3) {
+                        BlockFace side;
+                        try {
+                            side = BlockFace.valueOf(args[2].toUpperCase());
+                        } catch (IllegalArgumentException e) {
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Direction.");
                             return true;
-                		}
-                		int amt;
-                		try{
-                			amt = Integer.parseInt(args[1]);
-                		}catch(NumberFormatException e){
+                        }
+                        int amt;
+                        try {
+                            amt = Integer.parseInt(args[1]);
+                        } catch (NumberFormatException e) {
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Number.");
                             return true;
-                		}
-                		if(!rloc.containsKey(p.getName())&&!lloc.containsKey(p.getName())){
+                        }
+                        if (!rloc.containsKey(p.getName()) && !lloc.containsKey(p.getName())) {
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "You have not made an area selection yet.");
-                			return true;
-                		}
-                		final Location rl = rloc.get(p.getName());
+                            return true;
+                        }
+                        final Location rl = rloc.get(p.getName());
                         final Location ll = lloc.get(p.getName());
                         Vector v = rl.toVector().subtract(p.getLocation().toVector());
                         Vector v2 = ll.toVector().subtract(p.getLocation().toVector());
@@ -166,74 +166,75 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                          * +z = west
                          * -z = east
                          */
-                        
-                        
-                        if(side == BlockFace.UP){
-                        	if(v.getY()>v2.getY()){
-                        		if(rl.getY()+amt>=255){
-                        			rloc.put(p.getName(), new Location(rl.getWorld(),rl.getBlock().getX(),254,rl.getBlock().getZ()));
-                        		}else{
-                            		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        		}
-                        	}else{
-                        		if(ll.getY()+amt>=255){
-                        			lloc.put(p.getName(), new Location(ll.getWorld(),ll.getBlock().getX(),254,ll.getBlock().getZ()));
-                        		}else{
-                            		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        		}
-                        	}
-                        }else if(side == BlockFace.DOWN){
-                        	if(v.getY()<v2.getY()){
-                        		if(rl.getY()-amt<=0){
-                        			rloc.put(p.getName(), new Location(rl.getWorld(),rl.getBlock().getX(),0,rl.getBlock().getZ()));
-                        		}else{
-                            		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        		}
-                        	}else{
-                        		if(ll.getY()-amt<=0){
-                        			lloc.put(p.getName(), new Location(ll.getWorld(),ll.getBlock().getX(),0,ll.getBlock().getZ()));
-                        		}else{
-                            		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        		}                        	}
-                        }else if(side == BlockFace.NORTH){
-                        	if(v.getX()<v2.getX()){
-                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        	}else{
-                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        	}
-                        }else if(side == BlockFace.SOUTH){
-                        	if(v.getX()>v2.getX()){
-                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        	}else{
-                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        	}
-                        }else if(side == BlockFace.EAST){
-                        	if(v.getZ()<v2.getZ()){
-                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        	}else{
-                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        	}
-                        }else if(side == BlockFace.WEST){
-                        	if(v.getZ()>v2.getZ()){
-                        		rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
-                        	}else{
-                        		lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
-                        	}
-                        }else{
+
+
+                        if (side == BlockFace.UP) {
+                            if (v.getY() > v2.getY()) {
+                                if (rl.getY() + amt >= 255) {
+                                    rloc.put(p.getName(), new Location(rl.getWorld(), rl.getBlock().getX(), 254, rl.getBlock().getZ()));
+                                } else {
+                                    rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                                }
+                            } else {
+                                if (ll.getY() + amt >= 255) {
+                                    lloc.put(p.getName(), new Location(ll.getWorld(), ll.getBlock().getX(), 254, ll.getBlock().getZ()));
+                                } else {
+                                    lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                                }
+                            }
+                        } else if (side == BlockFace.DOWN) {
+                            if (v.getY() < v2.getY()) {
+                                if (rl.getY() - amt <= 0) {
+                                    rloc.put(p.getName(), new Location(rl.getWorld(), rl.getBlock().getX(), 0, rl.getBlock().getZ()));
+                                } else {
+                                    rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                                }
+                            } else {
+                                if (ll.getY() - amt <= 0) {
+                                    lloc.put(p.getName(), new Location(ll.getWorld(), ll.getBlock().getX(), 0, ll.getBlock().getZ()));
+                                } else {
+                                    lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                                }
+                            }
+                        } else if (side == BlockFace.NORTH) {
+                            if (v.getX() < v2.getX()) {
+                                rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                            } else {
+                                lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                            }
+                        } else if (side == BlockFace.SOUTH) {
+                            if (v.getX() > v2.getX()) {
+                                rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                            } else {
+                                lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                            }
+                        } else if (side == BlockFace.EAST) {
+                            if (v.getZ() < v2.getZ()) {
+                                rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                            } else {
+                                lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                            }
+                        } else if (side == BlockFace.WEST) {
+                            if (v.getZ() > v2.getZ()) {
+                                rloc.put(p.getName(), rl.getBlock().getRelative(side, amt).getLocation());
+                            } else {
+                                lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
+                            }
+                        } else {
                             p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Direction Not Allowed.");
-                        	return true;
+                            return true;
                         }
-                        
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Expanded "+amt+" "+side.toString().toLowerCase()+".");
-                        
-                	}else if(args.length==2){
-                		
-                		
-                	}else{
+
+                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Expanded " + amt + " " + side.toString().toLowerCase() + ".");
+
+                    } else if (args.length == 2) {
+
+
+                    } else {
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Incorrect Syntax.");
-                	}
-                	
-                	
+                    }
+
+
                 }
             }
         }
@@ -241,6 +242,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     }
 
 
+    @SuppressWarnings("UnusedDeclaration")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();

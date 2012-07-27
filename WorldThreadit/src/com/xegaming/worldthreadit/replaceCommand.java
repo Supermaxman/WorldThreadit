@@ -13,14 +13,14 @@ import org.bukkit.util.Vector;
  * Date: 19/07/12
  * Time: 15:43
  */
-public class replaceCommand extends Thread {
-    WorldThreadit threadit;
-    Location ll;
-    Location rl;
-    World world;
-    Material mat;
-    Material repl;
-    Player sender;
+class replaceCommand extends Thread {
+    private final WorldThreadit threadit;
+    private final Location ll;
+    private final Location rl;
+    private final World world;
+    private final Material mat;
+    private final Material repl;
+    private final Player sender;
 
     public replaceCommand(WorldThreadit threadit, Player sender, Location ll, Location rl, World world, Material mat, Material repl) {
         this.threadit = threadit;

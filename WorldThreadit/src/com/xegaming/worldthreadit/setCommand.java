@@ -13,13 +13,13 @@ import org.bukkit.util.Vector;
  * Date: 19/07/12
  * Time: 15:43
  */
-public class setCommand extends Thread {
-    WorldThreadit threadit;
-    Location ll;
-    Location rl;
-    World world;
-    Material mat;
-    Player sender;
+class setCommand extends Thread {
+    private final WorldThreadit threadit;
+    private final Location ll;
+    private final Location rl;
+    private final World world;
+    private final Material mat;
+    private final Player sender;
 
     public setCommand(WorldThreadit threadit, Player sender, Location ll, Location rl, World world, Material mat) {
         this.threadit = threadit;
