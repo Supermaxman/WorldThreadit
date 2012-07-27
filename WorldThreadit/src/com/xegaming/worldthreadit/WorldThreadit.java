@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -31,18 +30,22 @@ public class WorldThreadit extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        bq.interrupt();
-        getLogger().info("WorldThreadit Disabled.");
+        log.info("Shutting down blockqueue, please wait.");
+        bq.shouldrun = false;
+        while (bq.isAlive()) {
+            //wait
+        }
+
+        log.info("WorldThreadit Disabled.");
     }
 
     @Override
     public void onEnable() {
         log = getLogger();
         getServer().getPluginManager().registerEvents(new WorldThreadit(), this);
-        PluginDescriptionFile pdfFile = this.getDescription();
         bq = new BlockQueue(this);
         bq.start();
-        getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+        log.info("WorldThreadit enabled!");
     }
 
 
@@ -59,11 +62,11 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     final Location ll = lloc.get(p.getName());
 
                     if ((rl == null) || (ll == null)) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Locations not set.");
+                        Util.sendMessage(p, ChatColor.RED + "Locations not set.");
                         return true;
                     }
                     if (args.length != 2) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
+                        Util.sendMessage(p, ChatColor.RED + "Arguement Error.");
                         return true;
                     }
 
@@ -77,60 +80,22 @@ public class WorldThreadit extends JavaPlugin implements Listener {
 
 
                     if (m == null) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
+                        Util.sendMessage(p, ChatColor.RED + "Arguement Error.");
                         return true;
                     }
                     if ((m == Material.LAVA) || (m == Material.WATER)) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
+                        Util.sendMessage(p, ChatColor.RED + "Water and Lava Not Allowed.");
                         return true;
                     }
-                    p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
+                    Util.sendMessage(p, ChatColor.GREEN + "Edit queued.");
 
                     new setCommand(this, p, ll, rl, world, m);
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("replace")) {
-                    final Location rl = rloc.get(p.getName());
-                    final Location ll = lloc.get(p.getName());
+                    Util.sendMessage(p, ChatColor.RED + "Removed until set is stable.");
 
-                    if ((rl == null) || (ll == null)) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Locations not set.");
-                        return true;
-                    }
-                    if (args.length != 3) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
-                        return true;
-                    }
 
-                    Material m;
-                    try {
-                        m = Material.getMaterial(Integer.parseInt(args[1]));
-                    } catch (Exception e) {
-                        String s = args[1].toUpperCase();
-                        m = Material.getMaterial(s);
-                    }
-                    Material r;
-                    try {
-                        r = Material.getMaterial(Integer.parseInt(args[2]));
-                    } catch (Exception e) {
-                        String s = args[2].toUpperCase();
-                        r = Material.getMaterial(s);
-                    }
-
-                    if (m == null || r == null) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Arguement Error.");
-                        return true;
-                    }
-
-                    if ((r == Material.LAVA) || (r == Material.WATER)) {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Water and Lava Not Allowed.");
-                        return true;
-                    }
-                    p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Edit queued.");
-
-                    //final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
-                    //final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-                    new replaceCommand(this, p, ll, rl, world, m, r);
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("wand")) {
@@ -142,18 +107,18 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         try {
                             side = BlockFace.valueOf(args[2].toUpperCase());
                         } catch (IllegalArgumentException e) {
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Direction.");
+                            Util.sendMessage(p, ChatColor.RED + "That is not a Direction.");
                             return true;
                         }
                         int amt;
                         try {
                             amt = Integer.parseInt(args[1]);
                         } catch (NumberFormatException e) {
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "That is not a Number.");
+                            Util.sendMessage(p, ChatColor.RED + "That is not a Number.");
                             return true;
                         }
                         if (!rloc.containsKey(p.getName()) && !lloc.containsKey(p.getName())) {
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "You have not made an area selection yet.");
+                            Util.sendMessage(p, ChatColor.RED + "You have not made an area selection yet.");
                             return true;
                         }
                         final Location rl = rloc.get(p.getName());
@@ -221,17 +186,17 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                                 lloc.put(p.getName(), ll.getBlock().getRelative(side, amt).getLocation());
                             }
                         } else {
-                            p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Direction Not Allowed.");
+                            Util.sendMessage(p, ChatColor.RED + "Direction Not Allowed.");
                             return true;
                         }
 
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Expanded " + amt + " " + side.toString().toLowerCase() + ".");
+                        Util.sendMessage(p, ChatColor.GREEN + "Expanded " + amt + " " + side.toString().toLowerCase() + ".");
 
                     } else if (args.length == 2) {
 
 
                     } else {
-                        p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Incorrect Syntax.");
+                        Util.sendMessage(p, ChatColor.RED + "Incorrect Syntax.");
                     }
 
 

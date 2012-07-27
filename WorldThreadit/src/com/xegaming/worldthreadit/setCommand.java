@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -36,26 +35,19 @@ class setCommand extends Thread {
 
         final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
         final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-        synchronized (threadit.bq.list) {
-            for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
-                for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
-                    for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
-                        final Block b = world.getBlockAt(x, y, z);
-                        if (!(y <= 0 && y >= 256)) {
-                            if (!b.getType().equals(mat)) {
-                                if (!b.getChunk().isLoaded()) {
-                                    b.getChunk().load();
-                                }
-                                threadit.bq.addToBlockQueue(b, mat);
-                                i++;
-                            }
-                        }
+        for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
+            for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
+                for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
+                    if (!(y <= 0 && y >= 256)) {
+                        threadit.bq.addToBlockQueue(x, y, z, world, mat.getId());
+                        i++;
                     }
                 }
             }
         }
 
-        sender.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + i + " Block Edit.");
+
+        Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block Edit.", i));
         WorldThreadit.log.info(i + " Block Edit By " + sender.getName());
     }
 }

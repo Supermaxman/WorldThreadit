@@ -1,6 +1,5 @@
 package com.xegaming.worldthreadit;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
@@ -15,6 +14,7 @@ import java.util.NoSuchElementException;
 class BlockQueue extends Thread {
     final LinkedList<QueuedBlock> list = new LinkedList<QueuedBlock>();
     private final WorldThreadit threadit;
+    boolean shouldrun = true;
 
     public BlockQueue(WorldThreadit threadit) {
         this.threadit = threadit;
@@ -23,9 +23,9 @@ class BlockQueue extends Thread {
 
     @Override
     public void run() {
-        while (!isInterrupted()) {
+        while (shouldrun) {
             try {
-                sleep(1);
+                sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -36,7 +36,14 @@ class BlockQueue extends Thread {
                         threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
                             public void run() {
                                 World w = threadit.getServer().getWorld(queuedBlock.worldName);
+                                if (w == null) {
+                                    return;
+                                }
                                 final Block b = w.getBlockAt(queuedBlock.X, queuedBlock.Y, queuedBlock.Z);
+                                if (b == null) {
+                                    return;
+                                }
+
                                 if (!b.getChunk().isLoaded()) {
                                     b.getChunk().load();
                                 }
@@ -44,9 +51,7 @@ class BlockQueue extends Thread {
                             }
                         });
                     } catch (NoSuchElementException e) {
-                        break;
-                    } catch (NullPointerException e) {
-                        //Swallowing due to lazy
+                        return;
                     }
                 }
 
@@ -54,10 +59,12 @@ class BlockQueue extends Thread {
         }
     }
 
-    public void addToBlockQueue(Block b, Material m) {
-        QueuedBlock qb = new QueuedBlock(b.getX(), b.getY(), b.getZ(), b.getWorld().getName(), m.getId());
+    public void addToBlockQueue(int x, int y, int z, World world, int mat) {
+        synchronized (list) {
+            QueuedBlock qb = new QueuedBlock(x, y, z, world.getName(), mat);
 
-        list.push(qb);
+            list.push(qb);
+        }
 
     }
 }

@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="WorldThreadit">
+    <output-path>$PROJECT_DIR$/out/artifacts/WorldThreadit</output-path>
+    <root id="archive" name="WorldThreadit.jar">
+      <element id="module-output" name="WorldThreadit" />
+      <element id="file-copy" path="$PROJECT_DIR$/WorldThreadit/plugin.yml" />
+    </root>
+  </artifact>
+</component>

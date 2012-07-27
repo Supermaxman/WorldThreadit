@@ -1,7 +1,7 @@
 package com.xegaming.worldthreadit;
 
 /**
- * User: Benjamin
+ * User: Rainbow
  * Date: 18/07/12
  * Time: 13:55
  */
