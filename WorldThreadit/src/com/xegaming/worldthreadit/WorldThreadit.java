@@ -168,7 +168,6 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                          */
                         
                         
-                        
                         if(side == BlockFace.UP){
                         	if(v.getY()>v2.getY()){
                         		if(rl.getY()+amt>=255){
@@ -227,6 +226,9 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.GREEN + "Expanded "+amt+" "+side.toString().toLowerCase()+".");
                         
+                	}else if(args.length==2){
+                		
+                		
                 	}else{
                         p.sendMessage(ChatColor.AQUA + "[WorldThredit] " + ChatColor.RED + "Incorrect Syntax.");
                 	}
