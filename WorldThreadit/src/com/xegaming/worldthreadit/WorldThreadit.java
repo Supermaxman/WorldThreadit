@@ -69,7 +69,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         Util.sendMessage(p, ChatColor.RED + "Arguement Error.");
                         return true;
                     }
-
+                    
                     Material m;
                     try {
                         m = Material.getMaterial(Integer.parseInt(args[1]));
@@ -77,10 +77,14 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         String s = args[1].toUpperCase();
                         m = Material.getMaterial(s);
                     }
-
-
+                    
+                    
                     if (m == null) {
                         Util.sendMessage(p, ChatColor.RED + "Arguement Error.");
+                        return true;
+                    }
+                    if (!m.isBlock()) {
+                        Util.sendMessage(p, ChatColor.RED + "Cannot Set This Material.");
                         return true;
                     }
                     if ((m == Material.LAVA) || (m == Material.WATER)) {
