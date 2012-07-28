@@ -3,6 +3,7 @@ package com.xegaming.worldthreadit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -25,12 +26,19 @@ class BlockQueue extends Thread {
     public void run() {
         while (shouldrun) {
             try {
-                sleep(0);
+                sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             synchronized (list) {
-                while (!list.isEmpty()) {
+                int newsize = list.size() / 5;
+                if (newsize == 0) {
+                    newsize = 1;
+                }
+                if (list.size() > 0) {
+                    WorldThreadit.log.info("Queue loaded : " + list.size() + " remaining. Clearing this round : " + newsize);
+                }
+                while (list.size() >= newsize) {
                     try {
                         final QueuedBlock queuedBlock = list.pop();
                         threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
@@ -54,17 +62,15 @@ class BlockQueue extends Thread {
                         return;
                     }
                 }
-
             }
+
+
         }
     }
 
-    public void addToBlockQueue(int x, int y, int z, World world, int mat) {
+    public void addToBlockQueue(ArrayList<QueuedBlock> queuedBlockArrayList) {
         synchronized (list) {
-            QueuedBlock qb = new QueuedBlock(x, y, z, world.getName(), mat);
-
-            list.push(qb);
+            list.addAll(queuedBlockArrayList);
         }
-
     }
 }
