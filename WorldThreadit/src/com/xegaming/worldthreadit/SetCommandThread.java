@@ -16,7 +16,7 @@ import java.util.UUID;
  * Time: 15:43
  */
 
-class SetCommandThread extends Thread {
+public class SetCommandThread extends Thread {
     private final WorldThreadit threadit;
     private final Location ll;
     private final Location rl;

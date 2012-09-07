@@ -105,6 +105,8 @@ public class ExpandCommand {
 
         } else if (args.length == 2) {
         	//TODO direction expand
+        } else {
+            Util.sendMessage(p, ChatColor.RED + "Incorrect Syntax.");
         }
 	}
 	
