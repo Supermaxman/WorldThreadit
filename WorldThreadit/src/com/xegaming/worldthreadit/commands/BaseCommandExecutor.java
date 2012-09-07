@@ -9,13 +9,13 @@ public class BaseCommandExecutor extends BaseExecutor {
     protected void run(Player player, String[] args) {
         if(player.isOp()){//TODO add permissions
         	if (args[0].equalsIgnoreCase("set")) {
-                ExpandCommand.expand(player, args);
+                SetCommand.set(player, args);
             } else if (args[0].equalsIgnoreCase("replace")) {
-                
+                ReplaceCommand.replace(player, args);
             } else if (args[0].equalsIgnoreCase("wand")) {
-            	
+                WandCommand.wand(player, args);
             } else if (args[0].equalsIgnoreCase("expand")) {
-            	
+                ExpandCommand.expand(player, args);
             }
         }
     }
