@@ -1,5 +1,6 @@
 package com.xegaming.worldthreadit;
 
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import com.xegaming.worldthreadit.commands.BaseCommandExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +49,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
         bq = new BlockQueue(this);
         bq.start();
         log.info("WorldThreadit enabled!");
+        //getCommand("wt").setExecutor(new BaseCommandExecutor(this));
     }
 
 
@@ -87,8 +91,12 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                         Util.sendMessage(p, ChatColor.RED + "Cannot Set This Material.");
                         return true;
                     }
-                    if ((m == Material.LAVA) || (m == Material.WATER)) {
+                    if ((m == Material.LAVA) || (m == Material.WATER) || (m == Material.STATIONARY_WATER || (m == Material.STATIONARY_LAVA))) {
                         Util.sendMessage(p, ChatColor.RED + "Water and Lava Not Allowed.");
+                        return true;
+                    }
+                    if ((m == Material.GLASS)) {
+                        Util.sendMessage(p, ChatColor.RED + "Glass Not Allowed.");
                         return true;
                     }
                     Util.sendMessage(p, ChatColor.GREEN + "Edit queued.");

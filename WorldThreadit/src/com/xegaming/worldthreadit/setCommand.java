@@ -57,7 +57,7 @@ class setCommand extends Thread {
             for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
                 for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
                     if (!(y <= 0 && y >= 256)) {
-                        blocks.add(new QueuedBlock(x, y, z, worldName, matid));
+                        blocks.add(new QueuedBlock(x, y, z, worldName, matid, world.getBlockTypeIdAt(x,y,z), sender.getName()));
                         if (blocks.size() >= 10000) {
                             threadit.bq.addToBlockQueue(blocks);
                             blocks.clear();
