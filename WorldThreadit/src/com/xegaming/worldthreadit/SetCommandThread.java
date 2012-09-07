@@ -16,7 +16,7 @@ import java.util.UUID;
  * Time: 15:43
  */
 
-class setCommand extends Thread {
+class SetCommandThread extends Thread {
     private final WorldThreadit threadit;
     private final Location ll;
     private final Location rl;
@@ -25,7 +25,7 @@ class setCommand extends Thread {
     private final Player sender;
     private final UUID uuid;
     
-    public setCommand(WorldThreadit threadit, Player sender, Location ll, Location rl, World world, Material mat) {
+    public SetCommandThread(WorldThreadit threadit, Player sender, Location ll, Location rl, World world, Material mat) {
         this.threadit = threadit;
         this.ll = ll;
         this.rl = rl;

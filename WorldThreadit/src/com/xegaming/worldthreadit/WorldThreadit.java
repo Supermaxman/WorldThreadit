@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 public class WorldThreadit extends JavaPlugin implements Listener {
 
     //Required
-    private static final Map<String, Location> rloc = new HashMap<String, Location>();
-    private static final Map<String, Location> lloc = new HashMap<String, Location>();
+    public static final Map<String, Location> rloc = new HashMap<String, Location>();
+    public static final Map<String, Location> lloc = new HashMap<String, Location>();
     public BlockQueue bq;
     public static Logger log;
 
@@ -101,7 +101,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
                     }
                     Util.sendMessage(p, ChatColor.GREEN + "Edit queued.");
 
-                    new setCommand(this, p, ll, rl, world, m);
+                    new SetCommandThread(this, p, ll, rl, world, m);
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("replace")) {
