@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * User: Benjamin
@@ -22,7 +23,8 @@ class setCommand extends Thread {
     private final World world;
     private final Material mat;
     private final Player sender;
-
+    private final UUID uuid;
+    
     public setCommand(WorldThreadit threadit, Player sender, Location ll, Location rl, World world, Material mat) {
         this.threadit = threadit;
         this.ll = ll;
@@ -30,6 +32,7 @@ class setCommand extends Thread {
         this.world = world;
         this.mat = mat;
         this.sender = sender;
+        this.uuid = UUID.randomUUID();
         this.start();
     }
 
@@ -45,9 +48,6 @@ class setCommand extends Thread {
         l = Math.abs(l)+1;
         w = Math.abs(w)+1;
         h = Math.abs(h)+1;
-        System.out.println(l);
-        System.out.println(w);
-        System.out.println(h);
         
         int size = l*w*h;        
         Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block edit queued.", size));
@@ -57,7 +57,7 @@ class setCommand extends Thread {
             for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
                 for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
                     if (!(y <= 0 && y >= 256)) {
-                        blocks.add(new QueuedBlock(x, y, z, worldName, matid, world.getBlockTypeIdAt(x,y,z), sender.getName()));
+                        blocks.add(new QueuedBlock(x, y, z, worldName, matid, world.getBlockTypeIdAt(x,y,z), uuid));
                         if (blocks.size() >= 10000) {
                             threadit.bq.addToBlockQueue(blocks);
                             blocks.clear();

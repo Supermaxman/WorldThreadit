@@ -38,9 +38,19 @@ class BlockQueue extends Thread {
                 if (list.size() > 0) {
                     WorldThreadit.log.info("Queue loaded : " + list.size() + " remaining. Clearing this round : " + newsize);
                 }
+                int sleeptime = 0;
                 while (list.size() >= newsize) {
                     try {
                         final QueuedBlock queuedBlock = list.pop();
+                        sleeptime++;
+                        if(sleeptime>=500){
+                        	try {
+								sleep(5);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                        	sleeptime = 0;
+                        }
                         threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
                             public void run() {
                                 World w = threadit.getServer().getWorld(queuedBlock.worldName);
@@ -56,6 +66,7 @@ class BlockQueue extends Thread {
                                     b.getChunk().load();
                                 }
                                 b.setTypeId(queuedBlock.newID);
+                                
                             }
                         });
                     } catch (NoSuchElementException e) {
