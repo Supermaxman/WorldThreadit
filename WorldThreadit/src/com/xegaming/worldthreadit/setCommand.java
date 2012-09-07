@@ -39,18 +39,19 @@ class setCommand extends Thread {
         ArrayList<QueuedBlock> blocks = new ArrayList<QueuedBlock>();
         final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
         final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-        int total = 0;
-        for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
-            for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
-                for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
-                    if (!(y <= 0 && y >= 256)) {
-                        total++;
-                    }
-                }
-            }
-        }
-        Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block edit queued.", total));
-        WorldThreadit.log.info(total + " Block Edit queued By " + sender.getName());
+        int l = ll.getBlockX() - rl.getBlockX();
+        int w = ll.getBlockZ() - rl.getBlockZ();
+        int h = ll.getBlockY() - rl.getBlockY();
+        l = Math.abs(l)+1;
+        w = Math.abs(w)+1;
+        h = Math.abs(h)+1;
+        System.out.println(l);
+        System.out.println(w);
+        System.out.println(h);
+        
+        int size = l*w*h;        
+        Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block edit queued.", size));
+        WorldThreadit.log.info(size + " Block Edit queued By " + sender.getName());
 
         for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
             for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
