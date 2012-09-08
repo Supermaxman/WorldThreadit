@@ -51,7 +51,6 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     }
     
     
-    @SuppressWarnings("UnusedDeclaration")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
