@@ -28,6 +28,7 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     public BlockQueue bq;
     public static Logger log;
     public static WorldThreadit plugin;
+    
     @Override
     public void onDisable() {
         log.info("Shutting down blockqueue, please wait.");
