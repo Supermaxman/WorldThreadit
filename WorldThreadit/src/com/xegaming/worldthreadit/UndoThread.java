@@ -102,7 +102,7 @@ public class UndoThread extends Thread {
             			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
             		}
                 } catch (NoSuchElementException e) {
-        			Util.sendMessage(p, ChatColor.RED+"Error.");
+        			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
                     return;
                 }
     		}else{
