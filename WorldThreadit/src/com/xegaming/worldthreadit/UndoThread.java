@@ -94,12 +94,16 @@ public class UndoThread extends Thread {
     	synchronized(edits){
     		synchronized(edited){
     		if(edits.containsKey(name)){
-    			UUID id = edits.get(name).pop();
-        		if(edited.containsKey(id)){
-           		 	undo.add(id);
-        		}else{
-        			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
-        		}
+    			try {
+        			UUID id = edits.get(name).pop();
+        			if(edited.containsKey(id)){
+               		 	undo.add(id);
+            		}else{
+            			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
+            		}
+                } catch (NoSuchElementException e) {
+                    return;
+                }
     		}else{
     			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
     		}
