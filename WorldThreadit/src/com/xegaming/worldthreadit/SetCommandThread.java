@@ -42,14 +42,8 @@ public class SetCommandThread extends Thread {
         ArrayList<QueuedBlock> blocks = new ArrayList<QueuedBlock>();
         final Vector min = Vector.getMinimum(ll.toVector(), rl.toVector());
         final Vector max = Vector.getMaximum(ll.toVector(), rl.toVector());
-        int l = ll.getBlockX() - rl.getBlockX();
-        int w = ll.getBlockZ() - rl.getBlockZ();
-        int h = ll.getBlockY() - rl.getBlockY();
-        l = Math.abs(l)+1;
-        w = Math.abs(w)+1;
-        h = Math.abs(h)+1;
         
-        int size = l*w*h;        
+        int size = Util.findVolume(sender);     
         Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block edit queued.", size));
         WorldThreadit.log.info(size + " Block Edit queued By " + sender.getName());
 

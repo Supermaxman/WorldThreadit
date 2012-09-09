@@ -1,7 +1,10 @@
 package com.xegaming.worldthreadit.commands;
 
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.xegaming.worldthreadit.Util;
 import com.xegaming.worldthreadit.WorldThreadit;
 
 public class BaseCommandExecutor extends BaseExecutor {
@@ -16,6 +19,10 @@ public class BaseCommandExecutor extends BaseExecutor {
                 WandCommand.wand(player, args);
             } else if (args[0].equalsIgnoreCase("expand")) {
                 ExpandCommand.expand(player, args);
+            } else if (args[0].equalsIgnoreCase("count")) {
+                ExpandCommand.expand(player, args);
+            } else {
+            	Util.sendMessage(player, ChatColor.RED+"Unknown Command.");
             }
         }
     }
