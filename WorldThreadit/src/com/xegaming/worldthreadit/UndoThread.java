@@ -14,9 +14,9 @@ public class UndoThread extends Thread {
     final LinkedList<QueuedBlock> undoList = new LinkedList<QueuedBlock>();
     private final WorldThreadit threadit;
     boolean canrun = true;
-    public static LinkedHashMap<UUID, LinkedList<QueuedBlock>> edited = new LinkedHashMap<UUID, LinkedList<QueuedBlock>>();
-    public static LinkedList<UUID> undo = new LinkedList<UUID>();
-    public static LinkedHashMap<String, LinkedList<UUID>> edits = new LinkedHashMap<String, LinkedList<UUID>>();
+    final public static LinkedHashMap<UUID, LinkedList<QueuedBlock>> edited = new LinkedHashMap<UUID, LinkedList<QueuedBlock>>();
+    final public static LinkedList<UUID> undo = new LinkedList<UUID>();
+    final public static LinkedHashMap<String, LinkedList<UUID>> edits = new LinkedHashMap<String, LinkedList<UUID>>();
     public UndoThread(WorldThreadit threadit) {
         this.threadit = threadit;
         this.setName("threadit-UndoThread");
