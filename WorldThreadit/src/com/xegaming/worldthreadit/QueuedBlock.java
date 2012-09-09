@@ -29,7 +29,9 @@ class QueuedBlock {
     //Edit ID
     final UUID uuid;
     
-    public QueuedBlock(int X, int Y, int Z, String worldName, int newID, int oldID, UUID uuid) {
+    final byte oldData;
+    
+    public QueuedBlock(int X, int Y, int Z, String worldName, int newID, int oldID, UUID uuid, byte oldData) {
         this.X = X;
         this.Y = Y;
         this.Z = Z;
@@ -37,6 +39,7 @@ class QueuedBlock {
         this.newID = newID;
         this.oldID = oldID;
         this.uuid = uuid;
+        this.oldData = oldData;
         		
     }
 

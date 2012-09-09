@@ -55,7 +55,7 @@ public class UndoThread extends Thread {
                                         b.getChunk().load();
                                     }
                                     b.setTypeId(queuedBlock.oldID);
-                                    
+                                    b.setData(queuedBlock.oldData);
                                 }
                             });
                             sleeptime++;
@@ -82,6 +82,7 @@ public class UndoThread extends Thread {
     
     public static void addBlock(QueuedBlock b){
     	UUID id = b.uuid;
+    	
     	synchronized (edited){
     		if(!edited.containsKey(id)){
     			edited.put(id, new LinkedList<QueuedBlock>());
