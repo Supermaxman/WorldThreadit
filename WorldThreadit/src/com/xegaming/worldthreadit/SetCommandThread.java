@@ -46,12 +46,14 @@ public class SetCommandThread extends Thread {
         int size = Util.findVolume(sender);     
         Util.sendMessage(sender, String.format(ChatColor.GREEN + "%d Block edit queued.", size));
         WorldThreadit.log.info(size + " Block Edit queued By " + sender.getName());
-
+        UndoThread.addEdit(sender, uuid);
         for (int x = (int) min.getX(); x <= (int) max.getX(); x++) {
             for (int z = (int) min.getZ(); z <= (int) max.getZ(); z++) {
                 for (int y = (int) min.getY(); y <= (int) max.getY(); y++) {
                     if (!(y <= 0 && y >= 256)) {
-                        blocks.add(new QueuedBlock(x, y, z, worldName, matid, world.getBlockTypeIdAt(x,y,z), uuid));
+                    	QueuedBlock b = new QueuedBlock(x, y, z, worldName, matid, world.getBlockTypeIdAt(x,y,z), uuid);
+                        blocks.add(b);
+                        UndoThread.addBlock(b);
                         if (blocks.size() >= 10000) {
                             threadit.bq.addToBlockQueue(blocks);
                             blocks.clear();

@@ -20,7 +20,9 @@ public class BaseCommandExecutor extends BaseExecutor {
             } else if (args[0].equalsIgnoreCase("expand")) {
                 ExpandCommand.expand(player, args);
             } else if (args[0].equalsIgnoreCase("count")) {
-                ExpandCommand.expand(player, args);
+                CountCommand.count(player, args);
+            } else if (args[0].equalsIgnoreCase("undo")) {
+                UndoCommand.undo(player, args);
             } else {
             	Util.sendMessage(player, ChatColor.RED+"Unknown Command.");
             }

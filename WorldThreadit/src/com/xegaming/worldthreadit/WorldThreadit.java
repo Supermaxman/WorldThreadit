@@ -26,17 +26,22 @@ public class WorldThreadit extends JavaPlugin implements Listener {
     public static final Map<String, Location> rloc = new HashMap<String, Location>();
     public static final Map<String, Location> lloc = new HashMap<String, Location>();
     public BlockQueue bq;
+    public UndoThread ut;
+
     public static Logger log;
     public static WorldThreadit plugin;
     
     @Override
     public void onDisable() {
-        log.info("Shutting down blockqueue, please wait.");
+        log.info("Shutting down blockqueue and undothread, please wait.");
         bq.shouldrun = false;
         while (bq.isAlive()) {
             //wait
         }
-
+        ut.canrun = false;
+        while (ut.isAlive()) {
+            //wait
+        }
         log.info("WorldThreadit Disabled.");
     }
 
@@ -47,6 +52,8 @@ public class WorldThreadit extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new WorldThreadit(), this);
         bq = new BlockQueue(this);
         bq.start();
+        ut = new UndoThread(this);
+        ut.start();
         log.info("WorldThreadit enabled!");
         getCommand("wt").setExecutor(new BaseCommandExecutor(this));
     }
