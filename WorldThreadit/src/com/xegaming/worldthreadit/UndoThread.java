@@ -37,7 +37,6 @@ public class UndoThread extends Thread {
         			LinkedList<QueuedBlock> undolist = edited.get(id);
                     int sleeptime = 0;
                     while (!undolist.isEmpty()) {
-                        WorldThreadit.log.info("Undo Queue loaded : " + undolist.size() + " remaining.");
                     	try {
                         	final QueuedBlock queuedBlock = undolist.pop();
                         	threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
