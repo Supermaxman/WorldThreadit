@@ -94,9 +94,11 @@ public class UndoThread extends Thread {
     	String name = p.getName();
     	synchronized(edits){
     		synchronized(edited){
+        		synchronized(undo){
     		if(edits.containsKey(name)){
     			try {
-        			UUID id = edits.get(name).pop();
+        			UUID id = edits.get(name).getLast();
+        			edits.get(name).removeLast();
         			if(edited.containsKey(id)){
                		 	undo.add(id);
             		}else{
@@ -110,11 +112,13 @@ public class UndoThread extends Thread {
     			Util.sendMessage(p, ChatColor.RED+"You Have No Previous Edits.");
     		}
     		}
+    		}
     	}
 
     }
     public static void addEdit(Player p, UUID id){
     	String name = p.getName();
+    	System.out.println(id.toString().length());
     	synchronized(edits){
     		if(!edits.containsKey(name)){
     			edits.put(name, new LinkedList<UUID>());
