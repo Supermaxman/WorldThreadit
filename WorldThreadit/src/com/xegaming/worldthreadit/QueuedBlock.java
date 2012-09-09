@@ -8,14 +8,27 @@ import java.util.UUID;
  * Time: 13:55
  */
 class QueuedBlock {
-    final int X;
+    //X Coordinate of block
+	final int X;
+	
+    //Y Coordinate of block
     final int Y;
+    
+    //Z Coordinate of block
     final int Z;
+    
+    //World that contains the block
     final String worldName;
+    
+    //What to change the block to
     final int newID;
+    
+    //What the block was
     final int oldID;
+    
+    //Edit ID
     final UUID uuid;
-
+    
     public QueuedBlock(int X, int Y, int Z, String worldName, int newID, int oldID, UUID uuid) {
         this.X = X;
         this.Y = Y;

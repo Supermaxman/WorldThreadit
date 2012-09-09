@@ -31,26 +31,15 @@ class BlockQueue extends Thread {
                 e.printStackTrace();
             }
             synchronized (list) {
-                int newsize = list.size() / 5;
-                if (newsize == 0) {
-                    newsize = 1;
-                }
+              
                 if (list.size() > 0) {
-                    WorldThreadit.log.info("Queue loaded : " + list.size() + " remaining. Clearing this round : " + newsize);
+                    WorldThreadit.log.info("Queue loaded : " + list.size() + " remaining.");
                 }
                 int sleeptime = 0;
-                while (list.size() >= newsize) {
+                while (!list.isEmpty()) {
                     try {
                         final QueuedBlock queuedBlock = list.pop();
-                        sleeptime++;
-                        if(sleeptime>=500){
-                        	try {
-								sleep(5);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-                        	sleeptime = 0;
-                        }
+                       
                         threadit.getServer().getScheduler().scheduleSyncDelayedTask(threadit, new Runnable() {
                             public void run() {
                                 World w = threadit.getServer().getWorld(queuedBlock.worldName);
@@ -69,9 +58,19 @@ class BlockQueue extends Thread {
                                 
                             }
                         });
+                        sleeptime++;
+                        if(sleeptime>=500){
+                        	try {
+								sleep(5);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                        	sleeptime = 0;
+                        }
                     } catch (NoSuchElementException e) {
                         return;
                     }
+                    
                 }
             }
 
